@@ -1,0 +1,26 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Python virtual env (if you use one)
+venv/
+
+# Node modules (used for Appwrite SDK etc.)
+node_modules/
+
+# Environment files
+.env
+
+# Logs
+*.log
+
+# IDEs
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+Thumbs.db
