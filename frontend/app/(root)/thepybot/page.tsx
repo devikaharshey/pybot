@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import Sidebar from "@/components/pybot-components/Sidebar";
 import Header from "@/components/pybot-components/Header";
@@ -52,6 +52,8 @@ export default function HomePage() {
   ) as React.RefObject<HTMLDivElement>;
   const bottomRef = useRef<HTMLDivElement>(null!);
 
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
   const applyTheme = (theme: ThemeType) => {
     if (theme === "system") {
       const prefersDark = window.matchMedia(
@@ -74,9 +76,9 @@ export default function HomePage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        await account.get(); 
+        await account.get();
       } catch {
-        router.push("/sign-up"); 
+        router.push("/sign-up");
       }
     };
 
@@ -101,6 +103,21 @@ export default function HomePage() {
       mediaQuery.removeEventListener("change", systemThemeChangeHandler);
   }, [theme]);
 
+  const fetchSessions = useCallback(
+    async (uid: string) => {
+      try {
+        const res = await axios.get(`${API_BASE}/api/chats?user_id=${uid}`);
+        const sessionArray = Object.entries(res.data as ChatList).map(
+          ([id, chat]) => ({ id, name: chat.name || "", chat: chat.chat })
+        );
+        setSessions(sessionArray);
+      } catch (error) {
+        console.error("Error fetching sessions:", error);
+      }
+    },
+    [API_BASE]
+  );
+
   useEffect(() => {
     const initializeUser = async () => {
       try {
@@ -114,7 +131,7 @@ export default function HomePage() {
     };
 
     initializeUser();
-  }, [router]);
+  }, [router, fetchSessions]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -141,20 +158,6 @@ export default function HomePage() {
     }
   }, [toast]);
 
-  const fetchSessions = async (uid: string) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:5000/api/chats?user_id=${uid}`
-      );
-      const sessionArray = Object.entries(res.data as ChatList).map(
-        ([id, chat]) => ({ id, name: chat.name || "", chat: chat.chat })
-      );
-      setSessions(sessionArray);
-    } catch (error) {
-      console.error("Error fetching sessions:", error);
-    }
-  };
-
   const handleRename = (id: string) => {
     setSessionToRename(id);
     setNewSessionName("");
@@ -169,7 +172,7 @@ export default function HomePage() {
   const handleDelete = async () => {
     if (!sessionToDelete) return;
     try {
-      await axios.delete(`http://localhost:5000/api/chats/${sessionToDelete}`);
+      await axios.delete(`${API_BASE}/api/chats/${sessionToDelete}`);
       setSessions((prev) => prev.filter((s) => s.id !== sessionToDelete));
       if (sessionId === sessionToDelete) {
         setSessionId(null);
@@ -193,7 +196,7 @@ export default function HomePage() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/chat", {
+      const res = await axios.post(`${API_BASE}/api/chat`, {
         question,
         session_id: sessionId,
         user_id: userId,
@@ -216,7 +219,7 @@ export default function HomePage() {
 
   const signOut = async () => {
     try {
-      await account.get(); 
+      await account.get();
       await account.deleteSession("current");
       router.push("/log-in");
     } catch (error: unknown) {
@@ -297,7 +300,7 @@ export default function HomePage() {
 
                       let currentSessionId = sessionId;
                       if (!currentSessionId) {
-                        currentSessionId = crypto.randomUUID(); 
+                        currentSessionId = crypto.randomUUID();
                         setSessionId(currentSessionId);
                       }
 
@@ -305,23 +308,17 @@ export default function HomePage() {
 
                       try {
                         if (chatMode === "voice") {
-                          await axios.post(
-                            "http://localhost:5000/api/save-transcript",
-                            {
-                              transcript,
-                              session_id: currentSessionId,
-                              user_id: userId,
-                            }
-                          );
+                          await axios.post(`${API_BASE}/api/save-transcript`, {
+                            transcript,
+                            session_id: currentSessionId,
+                            user_id: userId,
+                          });
                         } else {
-                          const res = await axios.post(
-                            "http://localhost:5000/api/chat",
-                            {
-                              question: transcript,
-                              session_id: currentSessionId,
-                              user_id: userId,
-                            }
-                          );
+                          const res = await axios.post(`${API_BASE}/api/chat`, {
+                            question: transcript,
+                            session_id: currentSessionId,
+                            user_id: userId,
+                          });
 
                           const botMessage = {
                             sender: "bot" as const,

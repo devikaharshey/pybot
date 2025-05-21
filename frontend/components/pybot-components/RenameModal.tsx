@@ -2,6 +2,8 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { SessionType } from "@/lib/types";
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
 type Props = {
   showRenameModal: boolean;
   newSessionName: string;
@@ -28,22 +30,25 @@ export default function RenameModal({
   if (!showRenameModal) return null;
 
   const handleRename = async () => {
-    if (sessionToRename && newSessionName.trim()) {
-      try {
-        await axios.patch(`http://localhost:5000/api/chats/${sessionToRename}`, {
-          name: newSessionName,
-        });
-        setSessions(
-          sessions.map((s) =>
-            s.id === sessionToRename ? { ...s, name: newSessionName } : s
-          )
-        );
-        setShowRenameModal(false);
-        setShowMenu(null);
-        setToast({ message: "Chat renamed successfully!", type: "success" });
-      } catch (error) {
-        console.error("Failed to rename session", error);
-      }
+    if (!sessionToRename || !newSessionName.trim()) return;
+
+    try {
+      await axios.patch(`${API_BASE}/api/chats/${sessionToRename}`, {
+        name: newSessionName,
+      });
+
+      setSessions(
+        sessions.map((s) =>
+          s.id === sessionToRename ? { ...s, name: newSessionName } : s
+        )
+      );
+
+      setShowRenameModal(false);
+      setShowMenu(null);
+      setToast({ message: "Chat renamed successfully!", type: "success" });
+    } catch (error) {
+      console.error("Failed to rename session", error);
+      setToast({ message: "Failed to rename session.", type: "error" });
     }
   };
 
@@ -62,7 +67,12 @@ export default function RenameModal({
           <Button variant="ghost" onClick={() => setShowRenameModal(false)}>
             Cancel
           </Button>
-          <Button onClick={handleRename}>Rename</Button>
+          <Button
+            onClick={handleRename}
+            disabled={!newSessionName.trim()}
+          >
+            Rename
+          </Button>
         </div>
       </div>
     </div>
