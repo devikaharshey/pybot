@@ -23,6 +23,9 @@
 * 💾 **Cloud-native storage** with Appwrite
 * 🚀 **Deploy-ready** with separate frontend & backend structure
 
+## 🎞️ Demo Video
+https://github.com/user-attachments/assets/116a2879-c3e8-4a29-bd3a-fbe8f50cc9e1
+
 ## ▶️ How to Use It?
 
 1. **Open the app** in your browser at <a href="https://pybot-ecru.vercel.app/">https://pybot-ecru.vercel.app/</a>.
