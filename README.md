@@ -1,7 +1,7 @@
 # 🤖 PyBot – AI Voice & Chat Assistant
 
 **PyBot** is an AI-powered voice and chat assistant built with a Flask + Python backend and a sleek Next.js frontend. It uses **OpenRouter** for natural language responses and **Vapi** for voice interactivity. Data is managed with **Appwrite**, making the app fully modern, scalable, and serverless-ready.
-![image](https://github.com/user-attachments/assets/d063e67d-23f9-45bf-9c87-271b3f7822ed)
+![image](https://github.com/user-attachments/assets/b7d031c0-54eb-4093-ad7a-98f0435ef752)
 
 ## ⚙️ Tech Stack
 
