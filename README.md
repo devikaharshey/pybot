@@ -2,8 +2,6 @@
 
 **PyBot** is an AI-powered voice and chat assistant built with a Flask + Python backend and a sleek Next.js frontend. It uses **OpenRouter** for natural language responses and **Vapi** for voice interactivity. Data is managed with **Appwrite**, making the app fully modern, scalable, and serverless-ready.
 
---
-
 ## ⚙️ Tech Stack
 
 ![Next.js](https://img.shields.io/badge/Next.js-000?style=for-the-badge\&logo=next.js\&logoColor=white)
@@ -15,8 +13,6 @@
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge\&logo=tailwind-css\&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000?style=for-the-badge\&logo=vercel\&logoColor=white)
 
---
-
 ## 📦 Features
 
 * ✅ **Conversational AI** via OpenRouter
@@ -25,15 +21,11 @@
 * 💾 **Cloud-native storage** with Appwrite
 * 🚀 **Deploy-ready** with separate frontend & backend structure
 
---
-
 ## ▶️ How to Use It?
 
-1. **Open the frontend** in your browser at `[https://pybot-ecru.vercel.app/](https://pybot-ecru.vercel.app/)`.
+1. **Open the frontend** in your browser at `https://pybot-ecru.vercel.app/`.
 2. Type a message in the chatbox to start a conversation with the AI.
 3. Click the **voice button** to interact with PyBot using your microphone.
-
---
 
 ## 🗂️ Project Structure
 
@@ -49,8 +41,6 @@ pybot/
 │   ├── public/
 │   └── ...
 ```
-
---
 
 ## 🚀 Getting Started
 
@@ -80,8 +70,6 @@ npm run dev
 ```
 
 Now open [http://localhost:3000](http://localhost:3000) to interact with PyBot.
-
---
 
 ## 📄 License
 
