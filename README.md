@@ -12,6 +12,7 @@
 ![OpenRouter](https://img.shields.io/badge/OpenRouter-AI-blueviolet?style=for-the-badge)
 ![Vapi](https://img.shields.io/badge/Vapi-Voice%20Agent-yellowgreen?style=for-the-badge)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge\&logo=tailwind-css\&logoColor=white)
+![MagicUI](https://img.shields.io/badge/MagicUI-000?style=for-the-badge\&logo=magicui\&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000?style=for-the-badge\&logo=vercel\&logoColor=white)
 
 ## 📦 Features
