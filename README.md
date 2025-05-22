@@ -23,7 +23,7 @@
 
 ## ▶️ How to Use It?
 
-1. **Open the frontend** in your browser at `https://pybot-ecru.vercel.app/`.
+1. **Open the app** in your browser at <a href="https://pybot-ecru.vercel.app/">https://pybot-ecru.vercel.app/</a>.
 2. Type a message in the chatbox to start a conversation with the AI.
 3. Click the **voice button** to interact with PyBot using your microphone.
 
