@@ -150,7 +150,7 @@ def ask_bot(messages):
 
     data = {
         "model": "openai/gpt-3.5-turbo",
-        "max_tokens": 4000,
+        "max_tokens": 5000,
         "messages": [
             {
                 "role": "system",
