@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 
-const VerifyComponent = dynamic(() => import("@/components/VerifyComponent"), { ssr: false });
+const VerifyComponent = dynamic(() => import("./VerifyComponent"), { ssr: false });
 
 export default function Page() {
   return (
