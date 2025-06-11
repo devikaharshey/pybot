@@ -9,7 +9,7 @@ const techStackItems = [
   { name: "APPWRITE", filename: "appwrite.png" },
   { name: "NEXT.JS", filename: "nextjs.png" },
   { name: "PYTHON", filename: "python.png" },
-  { name: "OPENROUTER API", filename: "open-router.png" },
+  { name: "GOOGLE GEMINI", filename: "gemini.png" },
 ];
 
 const TechStack = () => {

@@ -45,6 +45,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         await account.create(userId, email, password);
         await account.createEmailPasswordSession(email, password);
         await account.updateName(username);
+        await account.createVerification("https://pybot-ecru.vercel.app//verify");
         await account.deleteSession("current");
         router.push("/log-in");
       } else {

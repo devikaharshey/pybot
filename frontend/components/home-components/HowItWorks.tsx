@@ -11,7 +11,7 @@ const steps = [
   {
     title: "Sign Up & Get Started",
     description:
-      "Create your free PyBot account to unlock voice and text chat powered by Vapi. Start your Python journey effortlessly.",
+      "Create your free PyBot account to unlock voice and text chat powered by Vapi & Google Gemini. Start your Python journey effortlessly.",
   },
   {
     title: "Chat by Voice or Text",

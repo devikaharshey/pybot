@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from flask_cors import CORS
 from uuid import uuid4
+import google.generativeai as genai
 from appwrite.client import Client
 from appwrite.services.databases import Databases
 
@@ -12,7 +13,6 @@ app = Flask(__name__)
 CORS(app)
 load_dotenv()
 
-API_KEY = os.getenv("API_KEY")  
 APPWRITE_ENDPOINT = os.getenv("APPWRITE_ENDPOINT")
 APPWRITE_PROJECT_ID = os.getenv("APPWRITE_PROJECT_ID")
 APPWRITE_API_KEY = os.getenv("APPWRITE_API_KEY")
@@ -20,6 +20,7 @@ APPWRITE_DATABASE_ID = os.getenv("APPWRITE_DATABASE_ID")
 APPWRITE_COLLECTION_ID = os.getenv("APPWRITE_COLLECTION_ID")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 GOOGLE_CSE_ID = os.getenv("GOOGLE_CSE_ID")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Appwrite client
 client = Client()
@@ -29,8 +30,11 @@ client.set_key(APPWRITE_API_KEY)
 
 database = Databases(client)
 
-# Helper Functions
+# Initialize Google Generative AI
+genai.configure(api_key=GEMINI_API_KEY)
+gemini_model = genai.GenerativeModel("gemini-1.5-flash")
 
+# Helper Functions
 def search_google(query, num_results=10):
     trusted_sites = [
         "docs.python.org",
@@ -140,20 +144,11 @@ def ask_bot(messages):
 
 *(Results provided using Google Search)*"""
 
-    url = "https://openrouter.ai/api/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost",
-        "X-Title": "PyTutor"
-    }
+    # Combine system prompt and user/assistant messages
+    full_prompt = ""
 
-    data = {
-        "model": "openai/gpt-3.5-turbo",
-        "messages": [
-            {
-                "role": "system",
-                "content": '''
+    # System message
+    full_prompt += """
 You are PyBot, a helpful and knowledgeable assistant focused on the Python programming language.
 
 You are created and developed by Devika Harshey, who is aiming to help others learn Python programming.
@@ -169,6 +164,7 @@ Always follow these formatting rules:
 - Include clickable links to official Python documentation or trusted resources when useful.
 
 Important:
+- You may greet the user only in your first reply. Avoid repeating greetings in every response.
 - Never respond with large blocks of unformatted text.
 - Every answer must be neatly organized with markdown formatting.
 - If user asks about Devika Harshey (your creator and developer), say "Devika Harshey is my creator, who is learning Python and wants to help others learn too."
@@ -180,20 +176,22 @@ If the user specifically asks for help with **creating a resume**, you are allow
 - Give advice tailored to tech jobs, especially Python-related roles.
 
 For any other non-Python, non-resume topics, politely respond that you can only help with Python programming and resume writing.
-'''
-            }
-        ] + messages
-    }
+    """
 
-    response = requests.post(url, headers=headers, json=data)
+    # Append conversation history
+    for msg in messages:
+        role = msg["role"]
+        content = msg["content"]
+        full_prompt += f"\n\n{role.capitalize()}: {content}"
 
-    if response.status_code == 200:
-        return response.json()["choices"][0]["message"]["content"]
-    else:
-        return f"Error: {response.status_code} - {response.text}"
+    try:
+        response = gemini_model.generate_content(full_prompt)
+        return response.text.strip()
+    except Exception as e:
+        print(f"Gemini Error: {e}")
+        return "Sorry, there was an error getting a response from Gemini."
 
 # API Routes
-
 @app.route("/api/chat", methods=["POST"])
 def chat():
     data = request.get_json()
