@@ -185,7 +185,9 @@ For any other non-Python, non-resume topics, politely respond that you can only 
         full_prompt += f"\n\n{role.capitalize()}: {content}"
 
     try:
+        print("FULL PROMPT:\n", full_prompt)  # 👈 Add this
         response = gemini_model.generate_content(full_prompt)
+        print("GEMINI RESPONSE:\n", response.text)  # 👈 And this
         return response.text.strip()
     except Exception as e:
         print(f"Gemini Error: {e}")
