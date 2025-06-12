@@ -4,6 +4,7 @@ import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { account } from "../lib/appwrite";
 import { ID } from "appwrite";
+import Toast from "./ui/Toast";
 import AnimatedSpan from "./AnimatedSpan";
 
 interface AuthFormProps {
@@ -17,6 +18,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
 
   const router = useRouter();
 
@@ -35,6 +40,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -45,9 +57,18 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         await account.create(userId, email, password);
         await account.createEmailPasswordSession(email, password);
         await account.updateName(username);
-        await account.createVerification("https://pybot-ecru.vercel.app//verify");
+        await account.createVerification(
+          "https://pybot-ecru.vercel.app//verify"
+        );
+        setToast({
+          message:
+            "Account created successfully! Please check your inbox to verify your email before logging in.",
+          type: "success",
+        });
         await account.deleteSession("current");
-        router.push("/log-in");
+        setTimeout(() => {
+          router.push("/log-in");
+        }, 5000);
       } else {
         await account.createEmailPasswordSession(email, password);
         router.push("/thepybot");
@@ -70,6 +91,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         isDark ? "bg-black text-white" : "bg-gray-50 text-gray-900"
       }`}
     >
+      {toast && <Toast toast={toast} />}
+
       <form
         onSubmit={handleSubmit}
         className={`relative overflow-hidden rounded-lg shadow-md p-8 w-full max-w-md transition-colors ${
