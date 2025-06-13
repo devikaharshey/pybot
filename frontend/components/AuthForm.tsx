@@ -62,7 +62,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         );
         setToast({
           message:
-            "Account created successfully! Please check your inbox to verify your email before logging in.",
+            "Account created successfully! Please verify your email before logging in.",
           type: "success",
         });
         await account.deleteSession("current");
