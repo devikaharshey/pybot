@@ -302,5 +302,51 @@ def save_transcript():
 
     return jsonify({'message': 'Transcript saved successfully'}), 200
 
+@app.route("/api/dashboard", methods=["GET"])
+def get_dashboard_data():
+    user_id = request.args.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Missing user_id"}), 400
+
+    chats = load_chats(user_id)
+    all_texts = []
+
+    for chat in chats.values():
+        for msg in chat["chat"]:
+            if msg["sender"] == "user":
+                all_texts.append(msg["text"])
+
+    if not all_texts:
+        return jsonify({
+            "resources": [],
+            "questions": [],
+            "analysis": "Not enough data to analyze."
+        })
+
+    history_summary = "\n".join(all_texts[-20:])  # Recent 20 user messages
+
+    gemini_prompt = f"""
+You're an AI analyst. Given this conversation history from a user learning Python:
+
+\"\"\"
+{history_summary}
+\"\"\"
+
+### Tasks:
+1. Personalized DSA Questions: Suggest 3-5 personalized DSA questions from Leetcode or GFG (titles only).
+2. Trusted Resources: List trusted resources for their weak areas (YouTube, docs, RealPython, etc.).
+3. Analysis: Summarize their Python knowledge level briefly.
+
+Use markdown format. Provide spaces between above mentioned tasks but don't print the <br> tag or # within response. Use emojis. Do give the links.
+
+"""
+
+    try:
+        response = gemini_model.generate_content(gemini_prompt)
+        return jsonify({"markdown": response.text.strip()})
+    except Exception as e:
+        print(f"Dashboard generation error: {e}")
+        return jsonify({"error": "Failed to generate dashboard data."}), 500
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

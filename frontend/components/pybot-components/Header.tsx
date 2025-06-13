@@ -1,8 +1,17 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Moon, Sun, Laptop, LogOut, MailPlus } from "lucide-react";
+import { Menu, X, Moon, Sun, Laptop, LogOut, Plus } from "lucide-react";
 import { AnimatedGradientText } from "../magicui/animated-gradient-text";
 import AnimatedSpan from "../AnimatedSpan";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 type Props = {
   setChatHistory: (val: []) => void;
@@ -39,6 +48,8 @@ export default function Header({
     if (theme === "dark") return <Laptop />;
     return <Sun />;
   };
+
+  const router = useRouter();
 
   return (
     <div className="flex items-start justify-between px-4 py-4">
@@ -102,18 +113,31 @@ export default function Header({
         >
           {renderThemeIcon()}
         </Button>
-        <Button
-          onClick={() => {
-            setChatHistory([]);
-            setSessionId(null);
-          }}
-          size="icon"
-          title="New Chat"
-          aria-label="New Chat"
-          className="rounded-full"
-        >
-          <MailPlus className="text-white dark:text-black" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              size="icon"
+              title="Actions"
+              aria-label="More Actions"
+              className="rounded-full"
+            >
+              <Plus className="text-white dark:text-black" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="center" className="w-40">
+            <DropdownMenuItem
+              onClick={() => {
+                setChatHistory([]);
+                setSessionId(null);
+              }}
+            >
+              New Chat
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push("/dashboard")}>
+              Dashboard
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Button
           onClick={signOut}
           size="icon"
