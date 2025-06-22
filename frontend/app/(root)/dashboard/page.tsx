@@ -56,14 +56,11 @@ export default function DashboardPage() {
   } | null>(null);
 
   const router = useRouter();
-
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
   const applyTheme = (theme: ThemeType) => {
     if (theme === "system") {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.classList.toggle("dark", prefersDark);
     } else {
       document.documentElement.classList.toggle("dark", theme === "dark");
@@ -116,9 +113,7 @@ export default function DashboardPage() {
       }
 
       try {
-        const res = await axios.get(
-          `${API_BASE}/api/dashboard?user_id=${userId}`
-        );
+        const res = await axios.get(`${API_BASE}/api/dashboard?user_id=${userId}`);
         setMarkdown(res.data.markdown || "No personalized data yet.");
       } catch {
         setMarkdown("Failed to load personalized data.");

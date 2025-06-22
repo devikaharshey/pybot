@@ -172,7 +172,7 @@ export default function HomePage() {
   const handleDelete = async () => {
     if (!sessionToDelete) return;
     try {
-      await axios.delete(`${API_BASE}/api/chats/${sessionToDelete}`);
+      await axios.delete(`${API_BASE}/api/chats/${sessionToDelete}?user_id=${userId}`);
       setSessions((prev) => prev.filter((s) => s.id !== sessionToDelete));
       if (sessionId === sessionToDelete) {
         setSessionId(null);

@@ -124,7 +124,7 @@ export default function Header({
               <Plus className="text-white dark:text-black" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" className="w-40">
+          <DropdownMenuContent align="center" className="w-44">
             <DropdownMenuItem
               onClick={() => {
                 setChatHistory([]);
@@ -135,6 +135,12 @@ export default function Header({
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => router.push("/dashboard")}>
               Dashboard
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push("/resume-analyzer")}>
+              Resume Analyzer
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push("/quiz")}>
+              Quiz & Progress
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
