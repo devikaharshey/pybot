@@ -433,7 +433,7 @@ Generate a 5-question multiple choice quiz based on the user's recent Python and
 
 Each question must follow this exact format:
 
-1. Question text goes here  
+Question text goes here  
 A) Option A  
 B) Option B  
 C) Option C  
