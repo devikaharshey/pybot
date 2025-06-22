@@ -28,11 +28,14 @@ export default function QuizGenerator() {
 
   const handleSubmit = async () => {
     const user_id = localStorage.getItem("user_id");
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/submit-quiz`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id, answers }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/submit-quiz`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id, answers }),
+      }
+    );
     const data = await res.json();
     setScore(data.score);
 
@@ -43,11 +46,14 @@ export default function QuizGenerator() {
 
   const resetQuiz = async () => {
     const user_id = localStorage.getItem("user_id");
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reset-quiz`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/reset-quiz`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id }),
+      }
+    );
 
     if (res.ok) {
       setQuiz([]);
@@ -103,11 +109,14 @@ export default function QuizGenerator() {
                             : "bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-700"
                         }`}
                     >
-                      {selected ? (
-                        <CheckCircle className="w-5 h-5 text-blue-500" />
-                      ) : (
-                        <Circle className="w-5 h-5 text-zinc-400" />
-                      )}
+                      <span className="w-6 h-6 flex items-center justify-center flex-none">
+                        {selected ? (
+                          <CheckCircle className="w-5 h-5 text-blue-500" />
+                        ) : (
+                          <Circle className="w-5 h-5 text-zinc-400" />
+                        )}
+                      </span>
+
                       <span>
                         <strong>{letter})</strong> {opt}
                       </span>

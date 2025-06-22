@@ -17,7 +17,8 @@ export default function ProgressChart() {
     labels: [],
     values: [],
   });
-  const [legendColor, setLegendColor] = useState("#374151"); 
+
+  const [legendColor, setLegendColor] = useState("#374151");
 
   const fetchData = async () => {
     const user_id = localStorage.getItem("user_id");
@@ -26,15 +27,27 @@ export default function ProgressChart() {
     setData(parsed);
   };
 
-  useEffect(() => {
-    fetchData();
-    const listener = () => fetchData();
-    window.addEventListener("quiz-updated", listener);
-
+  const updateLegendColor = () => {
     const isDark = document.documentElement.classList.contains("dark");
     setLegendColor(isDark ? "#f3f4f6" : "#374151");
+  };
 
-    return () => window.removeEventListener("quiz-updated", listener);
+  useEffect(() => {
+    fetchData();
+    window.addEventListener("quiz-updated", fetchData);
+
+    updateLegendColor();
+
+    const observer = new MutationObserver(updateLegendColor);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => {
+      window.removeEventListener("quiz-updated", fetchData);
+      observer.disconnect();
+    };
   }, []);
 
   const correct = data.values[0] || 0;
@@ -47,9 +60,9 @@ export default function ProgressChart() {
       {
         data: data.values,
         backgroundColor: ["#22c55e", "#ef4444"],
-        hoverOffset: 12,
         borderColor: "#fff",
         borderWidth: 2,
+        hoverOffset: 4,
       },
     ],
   };
@@ -79,7 +92,7 @@ export default function ProgressChart() {
   return (
     <div className="relative mb-6 p-6 border rounded-2xl bg-zinc-50 dark:bg-zinc-900 shadow">
       <h2 className="text-2xl font-bold mb-4 text-center">Your Progress</h2>
-      <div className="relative w-64 h-64 mx-auto">
+      <div className="relative w-64 h-64 mx-auto overflow-hidden">
         <Pie data={chartData} options={chartOptions} />
       </div>
       {total > 0 && (

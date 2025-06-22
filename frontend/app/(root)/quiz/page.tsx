@@ -23,7 +23,9 @@ export default function QuizPage() {
 
   const applyTheme = (theme: ThemeType) => {
     if (theme === "system") {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
       document.documentElement.classList.toggle("dark", prefersDark);
     } else {
       document.documentElement.classList.toggle("dark", theme === "dark");
@@ -115,9 +117,11 @@ export default function QuizPage() {
           <AnimatedGradientText>Knowledge Quiz & Progress</AnimatedGradientText>
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <QuizGenerator />
-          <ProgressChart />
+          <div className="w-full md:max-h-[400px]">
+            <ProgressChart />
+          </div>
         </div>
       </div>
     </main>
