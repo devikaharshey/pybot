@@ -47,8 +47,7 @@ export default function ResumePage() {
     name
       .split(" ")
       .map((n) => n[0])
-      .join("")
-      .toUpperCase();
+      .join("");
 
   useEffect(() => {
     const savedTheme = (localStorage.getItem("theme") as ThemeType) || "system";
