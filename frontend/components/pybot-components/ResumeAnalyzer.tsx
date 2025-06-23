@@ -4,6 +4,8 @@ import { useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import MarkdownMessage from "@/components/pybot-components/MarkdownMessage";
+import { FileText, FileDown } from "lucide-react";
+import pdfMake from "@/lib/pdfmakeSetup";
 
 export default function ResumeAnalyzer() {
   const [file, setFile] = useState<File | null>(null);
@@ -35,9 +37,61 @@ export default function ResumeAnalyzer() {
     }
   };
 
+  const downloadMarkdown = () => {
+    if (!result) return;
+
+    const now = new Date();
+    const filename = `resume_analysis_${now
+      .toISOString()
+      .slice(0, 19)
+      .replace(/[:.]/g, "-")}.md`;
+    const blob = new Blob([result], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadPDF = () => {
+    if (!result) return;
+
+    const now = new Date();
+    const filename = `resume_analysis_${now
+      .toISOString()
+      .slice(0, 19)
+      .replace(/[:.]/g, "-")}.pdf`;
+
+    const docDefinition = {
+      content: result
+        .split("\n")
+        .filter((line) => line.trim() !== "")
+        .map((line) => {
+          if (line.startsWith("## "))
+            return {
+              text: line.replace("## ", ""),
+              style: "header2",
+              margin: [0, 6, 0, 4],
+            };
+          if (line.startsWith("**") && line.endsWith("**"))
+            return { text: line.replace(/\*\*/g, ""), bold: true };
+          return { text: line, margin: [0, 2, 0, 2] };
+        }),
+      styles: {
+        header2: { fontSize: 18, bold: true },
+      },
+      defaultStyle: { fontSize: 12 },
+    };
+
+    pdfMake.createPdf(docDefinition).download(filename);
+  };
+
   return (
     <div className="mb-6 p-8 border rounded-2xl bg-zinc-50 dark:bg-zinc-900">
       <h2 className="text-xl font-semibold mb-2">📄 Resume ATS Analyzer</h2>
+
       <div className="mb-4">
         <label
           htmlFor="resume-upload"
@@ -62,10 +116,22 @@ export default function ResumeAnalyzer() {
       <Button onClick={handleAnalyze} disabled={!file || loading}>
         {loading ? "Analyzing..." : "Analyze Resume"}
       </Button>
+
       {result && (
-        <div className="mt-4">
-          <MarkdownMessage text={result} isBot />
-        </div>
+        <>
+          <div className="mt-4">
+            <MarkdownMessage text={result} isBot />
+          </div>
+
+          <div className="flex flex-wrap gap-3 mt-6">
+            <Button variant="outline" onClick={downloadMarkdown}>
+              <FileText className="w-4 h-4 mr-1" />Save Markdown
+            </Button>
+            <Button variant="outline" onClick={downloadPDF}>
+              <FileDown className="w-4 h-4 mr-1" />Save PDF
+            </Button>
+          </div>
+        </>
       )}
     </div>
   );
