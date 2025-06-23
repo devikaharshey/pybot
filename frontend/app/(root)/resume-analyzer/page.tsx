@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import ResumeAnalyzer from "@/components/pybot-components/ResumeAnalyzer";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Laptop, Moon, Sun } from "lucide-react";
+import { ArrowBigLeft, Laptop, Moon, Sun } from "lucide-react";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import AnimatedSpan from "@/components/AnimatedSpan";
 import { ThemeType } from "@/lib/types";
@@ -97,6 +97,7 @@ export default function ResumePage() {
             )}
           </div>
           <div className="flex items-center gap-2">
+            <Button onClick={() => router.push("/thepybot")}><ArrowBigLeft className="w-5 h-5"/> Back</Button>
             <Button
               onClick={toggleTheme}
               size="icon"
@@ -105,7 +106,6 @@ export default function ResumePage() {
             >
               {renderThemeIcon()}
             </Button>
-            <Button onClick={() => router.push("/thepybot")}>← Back</Button>
           </div>
         </div>
 

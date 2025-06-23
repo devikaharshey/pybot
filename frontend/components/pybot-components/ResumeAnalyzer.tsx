@@ -1,16 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import MarkdownMessage from "@/components/pybot-components/MarkdownMessage";
 import { FileText, FileDown } from "lucide-react";
+import Toast from "@/components/ui/Toast";
 import pdfMake from "@/lib/pdfmakeSetup";
 
 export default function ResumeAnalyzer() {
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFile(e.target.files?.[0] || null);
@@ -53,6 +65,7 @@ export default function ResumeAnalyzer() {
     a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
+    setToast({ message: `Downloaded as ${filename}`, type: "success" });
   };
 
   const downloadPDF = () => {
@@ -86,11 +99,13 @@ export default function ResumeAnalyzer() {
     };
 
     pdfMake.createPdf(docDefinition).download(filename);
+    setToast({ message: `Downloaded as ${filename}`, type: "success" });
   };
 
   return (
     <div className="mb-6 p-8 border rounded-2xl bg-zinc-50 dark:bg-zinc-900">
-      <h2 className="text-xl font-semibold mb-2">📄 Resume ATS Analyzer</h2>
+      <Toast toast={toast} />
+      <h2 className="text-2xl font-bold mb-2">Resume ATS Analyzer</h2>
 
       <div className="mb-4">
         <label
@@ -125,10 +140,12 @@ export default function ResumeAnalyzer() {
 
           <div className="flex flex-wrap gap-3 mt-6">
             <Button variant="outline" onClick={downloadMarkdown}>
-              <FileText className="w-4 h-4 mr-1" />Save Markdown
+              <FileText className="w-4 h-4 mr-1" />
+              Save Markdown
             </Button>
             <Button variant="outline" onClick={downloadPDF}>
-              <FileDown className="w-4 h-4 mr-1" />Save PDF
+              <FileDown className="w-4 h-4 mr-1" />
+              Save PDF
             </Button>
           </div>
         </>

@@ -16,6 +16,7 @@ import {
   Plus,
   FileText,
   FileDown,
+  ArrowBigLeft,
 } from "lucide-react";
 import { ThemeType } from "@/lib/types";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
@@ -278,7 +279,7 @@ export default function DashboardPage() {
               <FileDown className="w-4 h-4 mr-1" />Save PDF
             </Button>
             <Button onClick={() => router.push("/thepybot")} className="z-10">
-              PyBot
+              <ArrowBigLeft className="w-5 h-5"/> Back
             </Button>
             <Button
               onClick={toggleTheme}

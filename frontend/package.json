@@ -17,6 +17,7 @@
     "@vapi-ai/web": "^2.3.0",
     "appwrite": "^17.0.2",
     "axios": "^1.8.4",
+    "canvas-confetti": "^1.9.3",
     "chart.js": "^4.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -39,6 +40,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-chartjs-2": "^2.0.2",

@@ -6,7 +6,7 @@ import QuizGenerator from "@/components/pybot-components/QuizGenerator";
 import ProgressChart from "@/components/pybot-components/ProgressChart";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Laptop, Moon, Sun } from "lucide-react";
+import { ArrowBigLeft, Laptop, Moon, Sun } from "lucide-react";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import AnimatedSpan from "@/components/AnimatedSpan";
 import { ThemeType } from "@/lib/types";
@@ -100,6 +100,7 @@ export default function QuizPage() {
             )}
           </div>
           <div className="flex items-center gap-2">
+            <Button onClick={() => router.push("/thepybot")}><ArrowBigLeft className="w-5 h-5"/> Back</Button>
             <Button
               onClick={toggleTheme}
               size="icon"
@@ -108,7 +109,6 @@ export default function QuizPage() {
             >
               {renderThemeIcon()}
             </Button>
-            <Button onClick={() => router.push("/thepybot")}>← Back</Button>
           </div>
         </div>
 
