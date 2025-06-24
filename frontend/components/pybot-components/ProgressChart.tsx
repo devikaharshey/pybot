@@ -10,9 +10,13 @@ import {
   ChartOptions,
 } from "chart.js";
 
+type ProgressChartProps = {
+  deleteButton?: React.ReactNode;
+};
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function ProgressChart() {
+export default function ProgressChart({ deleteButton }: ProgressChartProps) {
   const [data, setData] = useState<{ labels: string[]; values: number[] }>({
     labels: [],
     values: [],
@@ -22,7 +26,9 @@ export default function ProgressChart() {
 
   const fetchData = async () => {
     const user_id = localStorage.getItem("user_id");
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/progress-chart?user_id=${user_id}`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/progress-chart?user_id=${user_id}`
+    );
     const parsed = await res.json();
     setData(parsed);
   };
@@ -100,6 +106,7 @@ export default function ProgressChart() {
           Current Progress: {percentage}%
         </span>
       )}
+      <div className="flex justify-center mt-4">{deleteButton}</div>
     </div>
   );
 }

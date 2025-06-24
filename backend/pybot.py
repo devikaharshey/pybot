@@ -273,33 +273,36 @@ def rename_chat(session_id):
 
 @app.route("/api/chats/<session_id>", methods=["DELETE"])
 def delete_chat_route(session_id):
-    user_id = request.args.get("user_id")
-    delete_chat(session_id)
+    delete_chat(session_id)  
+    return jsonify({"message": "Chat session deleted."})
 
-    if user_id:
-        def delete_all_docs_by_user(collection_name):
-            try:
-                all_docs = database.list_documents(
+@app.route("/api/quiz-data", methods=["DELETE"])
+def delete_quiz_data_route():
+    user_id = request.args.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Missing user_id"}), 400
+
+    def delete_all_docs_by_user(collection_name):
+        try:
+            all_docs = database.list_documents(
+                database_id=APPWRITE_DATABASE_ID,
+                collection_id=collection_name,
+                queries=[Query.equal("user_id", user_id)]
+            )
+            print(f"{collection_name} matched docs:", [d["$id"] for d in all_docs["documents"]])
+            for doc in all_docs["documents"]:
+                database.delete_document(
                     database_id=APPWRITE_DATABASE_ID,
                     collection_id=collection_name,
-                    queries=[Query.equal("user_id", user_id)]
+                    document_id=doc["$id"]
                 )
-                print(f"{collection_name} matched docs:", [d["$id"] for d in all_docs["documents"]])
-                for doc in all_docs["documents"]:
-                    database.delete_document(
-                        database_id=APPWRITE_DATABASE_ID,
-                        collection_id=collection_name,
-                        document_id=doc["$id"]
-                    )
-            except Exception as e:
-                print(f"Failed to delete from {collection_name}:", e)
+        except Exception as e:
+            print(f"Failed to delete from {collection_name}:", e)
 
-        delete_all_docs_by_user("quiz_cache")
-        delete_all_docs_by_user("quiz_scores")
-    else:
-        print("NO USER_ID FOUND IN QUERY PARAMS")
+    delete_all_docs_by_user("quiz_cache")
+    delete_all_docs_by_user("quiz_scores")
 
-    return jsonify({"message": "Chat and all related data deleted."})
+    return jsonify({"message": "Quiz-related data deleted."})
 
 @app.route("/api/save-transcript", methods=["POST"])
 def save_transcript():
