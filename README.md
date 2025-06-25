@@ -19,14 +19,14 @@
 
 ## 🎞️ Demo Video
 
-https://github.com/user-attachments/assets/8728c6a6-e531-431b-b6c9-89e34dd21f31
+https://github.com/user-attachments/assets/8d2e44f0-7d85-42b4-b01e-4a4aeccdc7d7
 
 ## 🚀 Features
 
 - 🎙️ Voice-based DSA interview simulation using Vapi
 - 💬 Text chat responses supported by Google Gemini
 - ✍️ Real-time transcription and response analysis
-- 📊 Personalized feedback post-interview
+- 📊 Personalized dashboard, quizzes (along with progress tracking) & resume analysis
 - ✅ Appwrite-based authentication with email verification
 - 🔐 Secure storage of user progress and data
 
